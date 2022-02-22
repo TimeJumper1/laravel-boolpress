@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Blog;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class BlogController extends Controller
 {
     /**
@@ -15,6 +15,13 @@ class BlogController extends Controller
     public function index()
     {
         //
+        $blogs = Blog::all();
+
+        $data = [
+            'blogs' => $blogs
+        ];
+        
+        return view('admin.blogs.index', $data);
     }
 
     /**
@@ -25,6 +32,7 @@ class BlogController extends Controller
     public function create()
     {
         //
+        return view('admin.blogs.create');
     }
 
     /**
@@ -36,6 +44,17 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         //
+        $form_data = $request->all();
+
+        $request->validate($this->getValidationRules());
+        $new_blog = new Blog();
+        $new_blog->fill($form_data);
+        
+        $new_blog->slug = $this->getUniqueSlugFromTitle($form_data['title']);
+
+        $new_blog->save();
+
+        return redirect()->route('admin.blogs.show', ['blog' => $new_blog->id]);
     }
 
     /**
@@ -47,6 +66,13 @@ class BlogController extends Controller
     public function show($id)
     {
         //
+        $blog = Blog::findOrFail($id);
+
+        $data = [
+            'blog' => $blog
+        ];
+        
+        return view('admin.blogs.show', $data);
     }
 
     /**
@@ -58,6 +84,13 @@ class BlogController extends Controller
     public function edit($id)
     {
         //
+        $blog = Blog::findOrFail($id);
+
+        $data = [
+            'blog' => $blog
+        ];
+
+        return view('admin.blogs.edit', $data);
     }
 
     /**
@@ -70,6 +103,19 @@ class BlogController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $form_data = $request->all();
+        $request->validate($this->getValidationRules());
+
+        $blog = Blog::findOrFail($id);
+        
+       
+        if($form_data['title'] != $blog->title) {
+            $form_data['slug'] = $this->getUniqueSlugFromTitle($form_data['title']);
+        }
+        
+        $blog->update($form_data);
+
+        return redirect()->route('admin.blogs.show', ['blog' => $blog->id]);
     }
 
     /**
@@ -81,5 +127,32 @@ class BlogController extends Controller
     public function destroy($id)
     {
         //
+        $blog = Blog::findOrFail($id);
+        $blog->delete();
+
+        return redirect()->route('admin.blogs.index');
+    }
+    protected function getValidationRules() {
+        return [
+            'title' => 'required|max:255',
+            'content' => 'required|max:60000'
+        ];
+    }
+
+    protected function getUniqueSlugFromTitle($title) {
+        
+        $slug = Str::slug($title);
+        $slug_base = $slug;
+        
+        $blog_found = Blog::where('slug', '=', $slug)->first();
+        $counter = 1;
+        while($blog_found) {
+            
+            $slug = $slug_base . '-' . $counter;
+            $blog_found = Blog::where('slug', '=', $slug)->first();
+            $counter++;
+        }
+
+        return $slug;
     }
 }

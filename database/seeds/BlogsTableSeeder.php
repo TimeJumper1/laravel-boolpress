@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 use App\Blog;
+use Illuminate\Support\Str;
 class BlogsTableSeeder extends Seeder
 {
     /**
