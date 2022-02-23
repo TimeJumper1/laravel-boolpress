@@ -50,7 +50,7 @@ class BlogController extends Controller
         $new_blog = new Blog();
         $new_blog->fill($form_data);
         
-        $new_blog->slug = $this->getUniqueSlugFromTitle($form_data['title']);
+        $new_blog->slug = Blog::getUniqueSlugFromTitle($form_data['title']);
 
         $new_blog->save();
 
@@ -110,7 +110,7 @@ class BlogController extends Controller
         
        
         if($form_data['title'] != $blog->title) {
-            $form_data['slug'] = $this->getUniqueSlugFromTitle($form_data['title']);
+            $form_data['slug'] = Blog::getUniqueSlugFromTitle($form_data['title']);
         }
         
         $blog->update($form_data);
@@ -139,20 +139,5 @@ class BlogController extends Controller
         ];
     }
 
-    protected function getUniqueSlugFromTitle($title) {
-        
-        $slug = Str::slug($title);
-        $slug_base = $slug;
-        
-        $blog_found = Blog::where('slug', '=', $slug)->first();
-        $counter = 1;
-        while($blog_found) {
-            
-            $slug = $slug_base . '-' . $counter;
-            $blog_found = Blog::where('slug', '=', $slug)->first();
-            $counter++;
-        }
-
-        return $slug;
-    }
+    
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
@@ -12,4 +12,21 @@ class Blog extends Model
         'content',
         'slug'
     ];
+
+    public static function getUniqueSlugFromTitle($title) {
+        
+        $slug = Str::slug($title);
+        $slug_base = $slug;
+        
+        $blog_found = Blog::where('slug', '=', $slug)->first();
+        $counter = 1;
+        while($blog_found) {
+            
+            $slug = $slug_base . '-' . $counter;
+            $blog_found = Blog::where('slug', '=', $slug)->first();
+            $counter++;
+        }
+
+        return $slug;
+    }
 }
