@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Blog;
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,7 +33,12 @@ class BlogController extends Controller
     public function create()
     {
         //
-        return view('admin.blogs.create');
+        $categories = Category::all();
+
+        $data = [
+            'categories' => $categories
+        ];
+        return view('admin.blogs.create', $data);
     }
 
     /**
@@ -85,9 +91,10 @@ class BlogController extends Controller
     {
         //
         $blog = Blog::findOrFail($id);
-
+        $categories = Category::all();
         $data = [
-            'blog' => $blog
+            'blog' => $blog,
+            'categories' => $categories
         ];
 
         return view('admin.blogs.edit', $data);
@@ -135,7 +142,8 @@ class BlogController extends Controller
     protected function getValidationRules() {
         return [
             'title' => 'required|max:255',
-            'content' => 'required|max:60000'
+            'content' => 'required|max:60000',
+            'category_id' => 'exists:categories,id|nullable'
         ];
     }
 
