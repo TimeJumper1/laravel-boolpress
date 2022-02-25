@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Blog;
 use App\Category;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -34,9 +35,10 @@ class BlogController extends Controller
     {
         //
         $categories = Category::all();
-
+        $tags = Tag::all();
         $data = [
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags
         ];
         return view('admin.blogs.create', $data);
     }
@@ -59,6 +61,10 @@ class BlogController extends Controller
         $new_blog->slug = Blog::getUniqueSlugFromTitle($form_data['title']);
 
         $new_blog->save();
+
+        if(isset($form_data['tags'])) {
+            $new_blog->tags()->sync($form_data['tags']);
+        }
 
         return redirect()->route('admin.blogs.show', ['blog' => $new_blog->id]);
     }
@@ -92,9 +98,11 @@ class BlogController extends Controller
         //
         $blog = Blog::findOrFail($id);
         $categories = Category::all();
+        $tags = Tag::all();
         $data = [
             'blog' => $blog,
-            'categories' => $categories
+            'categories' => $categories,
+            'tags' => $tags
         ];
 
         return view('admin.blogs.edit', $data);
@@ -122,6 +130,13 @@ class BlogController extends Controller
         
         $blog->update($form_data);
 
+        if(isset($form_data['tags'])) {
+            $blog->tags()->sync($form_data['tags']);
+        } else {
+            
+            $blog->tags()->sync([]);
+        }
+
         return redirect()->route('admin.blogs.show', ['blog' => $blog->id]);
     }
 
@@ -143,7 +158,8 @@ class BlogController extends Controller
         return [
             'title' => 'required|max:255',
             'content' => 'required|max:60000',
-            'category_id' => 'exists:categories,id|nullable'
+            'category_id' => 'exists:categories,id|nullable',
+            'tags' => 'exists:tags,id'
         ];
     }
 
