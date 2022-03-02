@@ -1,15 +1,15 @@
 <template>
     <div>
-        <WorkInProgress />
+        <Blogs />
     </div>
 </template>
 
 <script>
-import WorkInProgress from '../components/WorkInProgress.vue';
+import Blogs from '../components/Blogs.vue';
 export default {
     name: 'App',
     components: {
-        WorkInProgress
+        Blogs
     }
 }
 </script>
