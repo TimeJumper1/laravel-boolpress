@@ -1,15 +1,20 @@
 <template>
     <div>
-        <Blogs />
+        <Header />
+
+        <main>
+            <router-view></router-view>
+        </main>
+        
     </div>
 </template>
 
 <script>
-import Blogs from '../components/Blogs.vue';
+import Header from '../components/Header.vue';
 export default {
     name: 'App',
     components: {
-        Blogs
+        Header
     }
 }
 </script>

@@ -9,7 +9,7 @@ class BlogController extends Controller
 {
     //
     public function index() {
-        $posts = Blog::all();
+        $posts = Blog::paginate(6);
         
         $response_array = [
             'success' => true,
