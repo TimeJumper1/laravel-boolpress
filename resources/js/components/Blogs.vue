@@ -15,7 +15,7 @@
                         <li class="list-group-item">An item</li>
                     </ul> -->
                     <div class="card-body">
-                        <a href="#" class="card-link">Card link</a>
+                        <router-link :to="{ name: 'blog-details', params: { slug: blog.slug } }">Leggi articolo</router-link>
                     </div>
                 </div>
             </div>

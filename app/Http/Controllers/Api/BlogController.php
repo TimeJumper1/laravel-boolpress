@@ -17,4 +17,19 @@ class BlogController extends Controller
         ];
         return response()->json($response_array);
     }
+    public function show($slug) {
+        $post = Blog::where('slug', '=', $slug)->with(['category', 'tags'])->first();
+        
+        if($post) {
+            return response()->json([
+                'success' => true,
+                'results' => $post
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'results' => []
+            ]);
+        }
+    }
 }
