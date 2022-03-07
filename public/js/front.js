@@ -2701,6 +2701,13 @@ var render = function () {
       _vm._l(_vm.blogs, function (blog) {
         return _c("div", { key: blog.id, staticClass: "col" }, [
           _c("div", { staticClass: "card my-2" }, [
+            blog.cover
+              ? _c("img", {
+                  staticClass: "card-img-top",
+                  attrs: { src: blog.cover, alt: "blog.title" },
+                })
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("h5", { staticClass: "card-title" }, [
                 _vm._v(_vm._s(blog.title)),
@@ -2978,14 +2985,23 @@ var render = function () {
               _vm._l(_vm.blog.tags, function (tag) {
                 return _c("span", { key: tag.id }, [
                   _vm._v(
-                    "\n                " + _vm._s(tag.name) + "\n            "
+                    "\n                    " +
+                      _vm._s(tag.name) +
+                      "\n                "
                   ),
                 ])
               }),
               0
             )
-          : _c("span", [_vm._v("\n            nessun tag\n        ")]),
+          : _c("span", [_vm._v("\n                nessun tag\n            ")]),
       ]),
+      _vm._v(" "),
+      _vm.blog.cover
+        ? _c("img", {
+            staticClass: "card-img-top",
+            attrs: { src: _vm.blog.cover, alt: "blog.title" },
+          })
+        : _vm._e(),
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.blog.content))]),
     ]),

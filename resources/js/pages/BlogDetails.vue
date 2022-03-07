@@ -6,16 +6,16 @@
             <div v-if="blog.category">Category: {{ blog.category.name }}</div>
 
             <div class="mb-2"><strong>Tags:</strong>
-            <div v-if="blog.tags && blog.tags.length > 0">
-                <span v-for="tag in blog.tags" :key="tag.id" >
-                    {{ tag.name }}
+                <div v-if="blog.tags && blog.tags.length > 0">
+                    <span v-for="tag in blog.tags" :key="tag.id" >
+                        {{ tag.name }}
+                    </span>
+                </div>
+                <span v-else>
+                    nessun tag
                 </span>
             </div>
-            <span v-else>
-                nessun tag
-            </span>
-        </div>
-
+            <img v-if="blog.cover" :src="blog.cover" class="card-img-top" alt="blog.title">
             <p>{{ blog.content }}</p>
         </div>
     </section>

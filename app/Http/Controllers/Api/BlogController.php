@@ -10,6 +10,12 @@ class BlogController extends Controller
     //
     public function index() {
         $posts = Blog::paginate(6);
+
+        foreach($posts as $post) {
+            if($post->cover) {
+                $post->cover = url('storage/' . $post->cover);
+            }
+        }
         
         $response_array = [
             'success' => true,
@@ -20,6 +26,10 @@ class BlogController extends Controller
     public function show($slug) {
         $post = Blog::where('slug', '=', $slug)->with(['category', 'tags'])->first();
         
+        if($post->cover) {
+            $post->cover = url('storage/' . $post->cover);
+        }
+
         if($post) {
             return response()->json([
                 'success' => true,
