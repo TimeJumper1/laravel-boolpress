@@ -2091,11 +2091,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'blogDetails',
   data: function data() {
     return {
-      blog: false
+      blog: {}
     };
   },
   methods: {
@@ -2964,20 +2969,23 @@ var render = function () {
         ? _c("div", [_vm._v("Category: " + _vm._s(_vm.blog.category.name))])
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "mb-2" },
-        [
-          _c("strong", [_vm._v("Tags:")]),
-          _vm._v(" "),
-          _vm._l(_vm.blog.tags, function (tag) {
-            return _c("span", { key: tag.id }, [
-              _vm._v("\n            " + _vm._s(tag.name) + "\n        "),
-            ])
-          }),
-        ],
-        2
-      ),
+      _c("div", { staticClass: "mb-2" }, [
+        _c("strong", [_vm._v("Tags:")]),
+        _vm._v(" "),
+        _vm.blog.tags && _vm.blog.tags.length > 0
+          ? _c(
+              "div",
+              _vm._l(_vm.blog.tags, function (tag) {
+                return _c("span", { key: tag.id }, [
+                  _vm._v(
+                    "\n                " + _vm._s(tag.name) + "\n            "
+                  ),
+                ])
+              }),
+              0
+            )
+          : _c("span", [_vm._v("\n            nessun tag\n        ")]),
+      ]),
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s(_vm.blog.content))]),
     ]),

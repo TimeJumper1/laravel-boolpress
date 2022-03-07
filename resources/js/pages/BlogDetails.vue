@@ -6,8 +6,13 @@
             <div v-if="blog.category">Category: {{ blog.category.name }}</div>
 
             <div class="mb-2"><strong>Tags:</strong>
-            <span v-for="tag in blog.tags" :key="tag.id" >
-                {{ tag.name }}
+            <div v-if="blog.tags && blog.tags.length > 0">
+                <span v-for="tag in blog.tags" :key="tag.id" >
+                    {{ tag.name }}
+                </span>
+            </div>
+            <span v-else>
+                nessun tag
             </span>
         </div>
 
@@ -21,7 +26,7 @@ export default {
     name: 'blogDetails',
     data: function() {
         return {
-            blog: false
+            blog: {}
         };
     },
     methods: {

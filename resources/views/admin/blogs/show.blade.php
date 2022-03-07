@@ -15,7 +15,11 @@
                 nessuno
             @endforelse
         </div>
-
+        @if ($blog->cover)
+            <div>
+                <img src="{{ asset('storage/' . $blog->cover) }}" alt="{{ $blog->title }}">
+            </div>
+        @endif
         <p>{{ $blog->content }}</p>
 
         <div>

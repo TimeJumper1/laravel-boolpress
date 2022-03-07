@@ -7,6 +7,7 @@ use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 class BlogController extends Controller
 {
     /**
@@ -59,7 +60,12 @@ class BlogController extends Controller
         $new_blog->fill($form_data);
         
         $new_blog->slug = Blog::getUniqueSlugFromTitle($form_data['title']);
-
+        if(isset($form_data['image'])) {
+            // 1- Mettere l'immagine caricata nella cartella di Storage
+            $img_path = Storage::put('post_covers', $form_data['image']);
+            // 2- Salvare il path al file nella colonna cover del post
+            $new_blog->cover = $img_path;
+        }
         $new_blog->save();
 
         if(isset($form_data['tags'])) {
@@ -127,7 +133,18 @@ class BlogController extends Controller
         if($form_data['title'] != $blog->title) {
             $form_data['slug'] = Blog::getUniqueSlugFromTitle($form_data['title']);
         }
-        
+        if($form_data['image']) {
+            // Cancello il file vecchio
+            if($blog->cover) {
+                Storage::delete($blog->cover);
+            }
+
+            // Faccio l'upload il nuovo file
+            $img_path = Storage::put('post_covers', $form_data['image']);
+
+            // Salvo nella colonna cover il path al nuovo file
+            $form_data['cover'] = $img_path;
+        }
         $blog->update($form_data);
 
         if(isset($form_data['tags'])) {
@@ -159,7 +176,8 @@ class BlogController extends Controller
             'title' => 'required|max:255',
             'content' => 'required|max:60000',
             'category_id' => 'exists:categories,id|nullable',
-            'tags' => 'exists:tags,id'
+            'tags' => 'exists:tags,id',
+            'image' => 'image|max:512'
         ];
     }
 
