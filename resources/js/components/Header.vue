@@ -36,7 +36,10 @@ export default {
                     name: 'blog',
                     label: 'Blog'
                 },
-                
+                {
+                    name: 'contacts',
+                    label: 'Contattaci'
+                },
             ],
         };
     }

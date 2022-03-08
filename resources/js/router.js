@@ -9,6 +9,7 @@ import About from './pages/About.vue';
 import Blogs from './components/Blogs.vue';
 import NotFound from './pages/NotFound.vue';
 import BlogDetails from './pages/BlogDetails.vue';
+import Contacts from './pages/Contacts.vue';
 
 const router = new VueRouter({
     mode: "history",
@@ -38,6 +39,11 @@ const router = new VueRouter({
             name: "blog-details",
             component: BlogDetails
         },
+        {
+            path: "/contacts",
+            name: "contacts",
+            component: Contacts
+        }
         
     ]
 });
